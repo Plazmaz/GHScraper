@@ -6,6 +6,7 @@ var repoURL = 'https://api.github.com/repos%or/commits/%sha?client_id=0018d8ee60
 var dorks = [];
 var scannedCommits = 0;
 var USER_AGENT = "GitWatcher";
+var etags = {};
 
 var Dork = function(queryParts) {
 	this.queryParts = queryParts;
@@ -34,6 +35,16 @@ function QueryPart() {
 	this.isExtension = false;
 	this.isPath = false;
 	this.queryString = '';
+}
+
+function getOptions(url) {
+	return {
+	  url: url,
+	  headers: {
+		'User-Agent': USER_AGENT,
+		'If-None-Match': etags[url] ? etags[url] : ''
+	  }
+	};
 }
 
 function getDorks(filename) {
@@ -80,17 +91,14 @@ function getQueryParts(dork) {
 }
 
 function queryTimeline(callback) {
-	var options = {
-	  url: 'https://api.github.com/events?per_page=135&client_id=0018d8ee603d695257bc&client_secret=86289629d43719cdc0430014b4ec5fba0a6a72c6',
-	  headers: {
-		'User-Agent': USER_AGENT
-	  }
-	};
+	var options = getOptions('https://api.github.com/events?per_page=135&client_id=0018d8ee603d695257bc&client_secret=86289629d43719cdc0430014b4ec5fba0a6a72c6');
 	request(options, function(err, response, body) {
+		etags[options.url] = response.headers['ETag'];
 		if(err) {
 			console.error(err);
 		}
 		var events = JSON.parse(body);
+		console.log(body);
 		if(!events) {
 			console.log(body);
 			return;
@@ -105,16 +113,12 @@ function queryTimeline(callback) {
 				var commits = evt.payload.commits;
 				commits.forEach(function(commit) {
 					var commitURL = commit.url;
-					var options = {
-					  url: commitURL + '?client_id=0018d8ee603d695257bc&client_secret=86289629d43719cdc0430014b4ec5fba0a6a72c6',
-					  headers: {
-						'User-Agent': USER_AGENT
-					  }
-					};
+					var options = getOptions(commitURL + '?client_id=0018d8ee603d695257bc&client_secret=86289629d43719cdc0430014b4ec5fba0a6a72c6');
 
 					request(options, function(err, response, body) {
+						etags[options.url] = response.headers['ETag'];
 						scannedCommits++;
-						if(scannedCommits % 10 == 0 && scannedCommits > 0) {
+						if(scannedCommits % 50 == 0 && scannedCommits > 0) {
 							console.log(scannedCommits + " commits scanned...");
 						}
 						if(err) {
