@@ -5,6 +5,7 @@ var commitURLRegexp = /<a href="(.*?)\/commit\/(.*?)"/g
 var repoURL = 'https://api.github.com/repos%or/commits/%sha?client_id=0018d8ee603d695257bc&client_secret=86289629d43719cdc0430014b4ec5fba0a6a72c6'
 var dorks = [];
 var scannedCommits = 0;
+var USER_AGENT = "GitWatcher";
 
 var Dork = function(queryParts) {
 	this.queryParts = queryParts;
@@ -79,34 +80,35 @@ function getQueryParts(dork) {
 }
 
 function queryTimeline(callback) {
-	request('https://github.com/timeline', function(err, response, body) {
+	var options = {
+	  url: 'https://api.github.com/events?per_page=135&client_id=0018d8ee603d695257bc&client_secret=86289629d43719cdc0430014b4ec5fba0a6a72c6',
+	  headers: {
+		'User-Agent': USER_AGENT
+	  }
+	};
+	request(options, function(err, response, body) {
 		if(err) {
 			console.error(err);
 		}
-		var obj = parseString(body, function (err, result) {
-			if(err) {
-				console.error(err);
-				console.log(body);
-				return;
-			}
-			var events = result[Object.keys(result)[0]].entry;
-			for(var i = 0; i < events.length; i++) {
-				var evt = events[i];
-				var id = evt.id.toString();
-				id = id.replace('tag:github.com,2008:', '');
-				if(id.indexOf('PushEvent') == 0 || id.indexOf('CreateEvent') == 0 || id.indexOf('PullRequestEvent') == 0) {
-					commitURLRegexp.lastIndex = 0;
-					var commitURLGroups = commitURLRegexp.exec(evt.content[0]['_'].toString());
-					//Usually when making new trees.
-					if(commitURLGroups == null) {
-						return;
-					}
-					var commitURL = commitURLGroups[1] + '/commit/' + commitURLGroups[2];
-					var apiRepoURL = repoURL.replace('%or', commitURLGroups[1]).replace('%sha', commitURLGroups[2]);
+		var events = JSON.parse(body);
+		if(!events) {
+			console.log(body);
+			return;
+		}
+		for(var i = 0; i < events.length; i++) {
+			var evt = events[i];
+			var type = evt.type;
+			if(type.indexOf('PushEvent') == 0 || type.indexOf('CreateEvent') == 0 || type.indexOf('PullRequestEvent') == 0) {
+				if(!evt.payload.commits) {
+					continue;
+				}
+				var commits = evt.payload.commits;
+				commits.forEach(function(commit) {
+					var commitURL = commit.url;
 					var options = {
-					  url: apiRepoURL,
+					  url: commitURL + '?client_id=0018d8ee603d695257bc&client_secret=86289629d43719cdc0430014b4ec5fba0a6a72c6',
 					  headers: {
-						'User-Agent': 'GitWatcher'
+						'User-Agent': USER_AGENT
 					  }
 					};
 
@@ -138,10 +140,10 @@ function queryTimeline(callback) {
 							}
 						}
 					});
-				}
+				});
 			}
-		});
+		};
 	})
 }
 queryTimeline();
-setInterval(queryTimeline, (Math.random() * 2000) + 1000);
+setInterval(queryTimeline, 7000);
