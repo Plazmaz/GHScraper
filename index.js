@@ -1,13 +1,16 @@
 var request = require('request');
 var fs = require('fs');
-var parseString = require('xml2js').parseString;
-var commitURLRegexp = /<a href="(.*?)\/commit\/(.*?)"/g
-var repoURL = 'https://api.github.com/repos%or/commits/%sha?client_id=0018d8ee603d695257bc&client_secret=86289629d43719cdc0430014b4ec5fba0a6a72c6'
 var dorks = [];
 var scannedCommits = 0;
 var USER_AGENT = "GitWatcher";
+var cid = '54a07f779e59919e3204'
+var secret = '0cb867b3d79eed14b680d03fa8bd834ed865f7ee'
 var etags = {};
-
+var oldLog = console.log;
+console.log = function(txt) {
+	oldLog(txt);
+	fs.appendFile('data-log.txt', txt.trim() + '\r\n');
+}
 var Dork = function(queryParts) {
 	this.queryParts = queryParts;
 	this.matches = function(fileData) {
@@ -91,14 +94,13 @@ function getQueryParts(dork) {
 }
 
 function queryTimeline(callback) {
-	var options = getOptions('https://api.github.com/events?per_page=135&client_id=0018d8ee603d695257bc&client_secret=86289629d43719cdc0430014b4ec5fba0a6a72c6');
+	var options = getOptions('https://api.github.com/events?per_page=135&client_id=' + cid + '&client_secret=' + secret);
 	request(options, function(err, response, body) {
 		etags[options.url] = response.headers['ETag'];
 		if(err) {
 			console.error(err);
 		}
 		var events = JSON.parse(body);
-		console.log(body);
 		if(!events) {
 			console.log(body);
 			return;
@@ -113,7 +115,7 @@ function queryTimeline(callback) {
 				var commits = evt.payload.commits;
 				commits.forEach(function(commit) {
 					var commitURL = commit.url;
-					var options = getOptions(commitURL + '?client_id=0018d8ee603d695257bc&client_secret=86289629d43719cdc0430014b4ec5fba0a6a72c6');
+					var options = getOptions(commitURL + '?client_id=' + cid + '&client_secret=' + secret);
 
 					request(options, function(err, response, body) {
 						etags[options.url] = response.headers['ETag'];
@@ -150,4 +152,4 @@ function queryTimeline(callback) {
 	})
 }
 queryTimeline();
-setInterval(queryTimeline, 7000);
+setInterval(queryTimeline, 11000);
