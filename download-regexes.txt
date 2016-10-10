@@ -1,0 +1,5 @@
+https:\/\/github.com\/(.*?)\/(.*?)\/raw\/([A-Za-z0-9\.\-\_]+)(.*?)\/([A-Za-z0-9\.\-\_]+)\r\n
+
+Replace with
+
+\r\nwget https:\/\/github.com/$1/$2/raw/$3$4/$5 -O $1-$2-$3-$5.gitdat

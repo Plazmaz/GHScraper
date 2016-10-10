@@ -58,7 +58,6 @@ function getDorks(filename) {
 		var tmpDorks = data.split('\n');
 		for(var i = 0; i < tmpDorks.length; i++) {
 			var rawDork = tmpDorks[i];
-			console.log(rawDork)
 			dorks.push(new Dork(getQueryParts(rawDork)));
 			
 		}
@@ -142,6 +141,7 @@ function queryTimeline(callback) {
 								if(dorks[j].matches(file)) {
 									console.log(JSON.stringify(dorks[j].queryParts) + ' matched file ' + file.filename + ' with sha ' + file.sha + '!');
 									console.log('Data url: ' + file.raw_url);
+									return;
 								}
 							}
 						}
@@ -151,5 +151,6 @@ function queryTimeline(callback) {
 		};
 	})
 }
+console.log("=== Starting new scan ===")
 queryTimeline();
 setInterval(queryTimeline, 11000);

@@ -2,7 +2,8 @@ filename:.npmrc _auth
 filename:.dockercfg auth
 extension:pem private
 extension:ppk private
-filename:id_rsa or filename:id_dsa
+filename:id_rsa
+filename:id_dsa
 extension:sql mysql dump
 extension:sql mysql dump password
 define("DB_PASSWORD"
@@ -72,3 +73,4 @@ shodan_api_key extension:sh
 shodan_api_key extension:json
 shodan_api_key extension:rb
 filename:shadow path:etc
+filename:passwd path:etc
