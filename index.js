@@ -1,10 +1,16 @@
 var request = require('request');
 var fs = require('fs');
+
+//Configuration
+//////////////////////////////////////
+const USER_AGENT = "GHScraper";     //
+const cid = 'YOUR_CLIENT_ID_HERE';  //
+const secret = 'YOUR_SECRET_HERE';  //
+//////////////////////////////////////
+//Do not push this file to public repos with this information included.
+
 var dorks = [];
 var scannedCommits = 0;
-var USER_AGENT = "GitWatcher";
-var cid = '54a07f779e59919e3204'
-var secret = '0cb867b3d79eed14b680d03fa8bd834ed865f7ee'
 var etags = {};
 var oldLog = console.log;
 console.log = function(txt) {
