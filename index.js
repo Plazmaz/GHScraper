@@ -1,13 +1,9 @@
 var request = require('request');
 var fs = require('fs');
 
-//Configuration
-//////////////////////////////////////
-const USER_AGENT = "GHScraper";     //
-const cid = 'YOUR_CLIENT_ID_HERE';  //
-const secret = 'YOUR_SECRET_HERE';  //
-//////////////////////////////////////
-//Do not push this file to public repos with this information included.
+const USER_AGENT = "GHScraper";
+var cid;
+var secret;
 
 var dorks = [];
 var scannedCommits = 0;
@@ -39,6 +35,23 @@ String.prototype.endsWith = function(suffix) {
     return this.match(suffix+"$") == suffix;
 };
 
+fs.readFile('config.json', 'utf-8', function(err, data) {
+	if(err) {
+		console.error(err);
+		return;
+	} else {
+		var json = JSON.parse(data);
+		if(!json.client_id || !json.client_secret) {
+			console.error("Invalid or corrupted configuration file!")
+			return;
+		}
+		cid = json.client_id;
+		secret = json.client_secret;
+		
+		getDorks('github-dorks.txt');
+	}
+});
+
 function QueryPart() {
 	this.isFilename = false;
 	this.isExtension = false;
@@ -64,13 +77,14 @@ function getDorks(filename) {
 		var tmpDorks = data.split('\n');
 		for(var i = 0; i < tmpDorks.length; i++) {
 			var rawDork = tmpDorks[i];
+			if(rawDork.indexOf("//") == 0) {
+				continue;
+			}
 			dorks.push(new Dork(getQueryParts(rawDork)));
 			
 		}
 	});
 }
-
-getDorks('github-dorks.txt')
 
 function getQueryParts(dork) {
 	var parts = [];
