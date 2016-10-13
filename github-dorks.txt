@@ -15,7 +15,7 @@ filename:credentials aws_access_key_id
 filename:.s3cfg
 filename:wp-config.php
 filename:.htpasswd
-filename:.env DB_USERNAME NOT homestead
+filename:.env DB_USERNAME
 filename:.env MAIL_HOST=smtp.gmail.com
 filename:.git-credentials
 PT_TOKEN extension:sh
@@ -36,7 +36,7 @@ extension:agilekeychain
 extension:keychain
 jsforce extension:js conn.login
 SF_USERNAME "salesforce"
-filename:.tugboat NOT "_tugboat"
+filename:.tugboat
 HEROKU_API_KEY extension:sh
 HEROKU_API_KEY extension:json
 filename:.netrc password
@@ -62,7 +62,7 @@ filename:.history
 filename:.sh_history
 filename:sshd_config
 filename:dhcpd.conf
-filename:prod.exs NOT "prod.secret.exs"
+filename:prod.exs
 filename:prod.secret.exs
 filename:configuration.php JConfig password
 filename:config.php dbpasswd
@@ -74,3 +74,12 @@ shodan_api_key extension:json
 shodan_api_key extension:rb
 filename:shadow path:etc
 filename:passwd path:etc
+filename:ssh_config
+filename:.ssh_config
+extension:pkcs12
+extension:asc
+filename:.mysql_history
+filename:.pgpass
+filename:database.yml
+filename:credentials.xml
+filename:knife.rb
