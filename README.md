@@ -9,8 +9,10 @@ to download the required dependencies.
 ## Ubuntu
 Install npm and nodejs:
 
-    sudo apt-get install nodejs npm
-
+    sudo apt-get install nodejs npm git
+    git clone https://github.com/Plazmaz/GHScraper.git
+    cd GHScraper
+    npm install
 
 # Configuration
 
