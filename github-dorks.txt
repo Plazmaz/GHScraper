@@ -76,10 +76,10 @@ filename:shadow path:etc
 filename:passwd path:etc
 filename:ssh_config
 filename:.ssh_config
-extension:pkcs12
-extension:asc
+extension:pkcs12 private
+extension:asc private
 filename:.mysql_history
 filename:.pgpass
-filename:database.yml
+filename:database.yml pass
 filename:credentials.xml
 filename:knife.rb
