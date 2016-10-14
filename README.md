@@ -1,6 +1,3 @@
-# GHScraper
-A tool for gathering potentially sensitive data from github's public stream
-
 # Installation
 ## Windows
 To use GHScraper, you must first download and install [nodejs](https://nodejs.org/en/download/) and npm. Once this is finished, open command prompt in the GHScraper directory and use
@@ -12,8 +9,10 @@ to download the required dependencies.
 ## Ubuntu
 Install npm and nodejs:
 
-    sudo apt-get install nodejs npm
-
+    sudo apt-get install nodejs npm git
+    git clone https://github.com/Plazmaz/GHScraper.git
+    cd GHScraper
+    npm install
 
 # Configuration
 
