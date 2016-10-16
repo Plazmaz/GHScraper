@@ -1,5 +1,5 @@
 {
-  "name": "CommitScraper",
+  "name": "GHScraper",
   "version": "1.0.0",
   "description": "Scrape github commits for sensitive data",
   "main": "index.js",
@@ -9,16 +9,16 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+	"start": "node index.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Plazmaz/CommitScraper.git"
+    "url": "https://github.com/Plazmaz/GHScraper.git"
   },
   "author": "Dylan Katz",
-  "license": "N/A",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Plazmaz/CommitScraper/issues"
+    "url": "https://github.com/Plazmaz/GHScraper/issues"
   },
-  "homepage": "https://github.com/Plazmaz/CommitScraper"
+  "homepage": "https://github.com/Plazmaz/GHScraper"
 }

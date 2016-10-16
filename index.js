@@ -115,10 +115,14 @@ function getQueryParts(dork) {
 function queryTimeline(callback) {
 	var options = getOptions('https://api.github.com/events?per_page=135&client_id=' + cid + '&client_secret=' + secret);
 	request(options, function(err, response, body) {
-		etags[options.url] = response.headers['ETag'];
 		if(err) {
 			console.error(err);
+			return;
 		}
+		if(response) {
+			etags[options.url] = response.headers['ETag'];
+		}
+		
 		var events = JSON.parse(body);
 		if(!events) {
 			console.log(body);
@@ -137,13 +141,15 @@ function queryTimeline(callback) {
 					var options = getOptions(commitURL + '?client_id=' + cid + '&client_secret=' + secret);
 
 					request(options, function(err, response, body) {
-						etags[options.url] = response.headers['ETag'];
+						if(response) {
+							etags[options.url] = response.headers['ETag'];
+						}
 						scannedCommits++;
 						if(scannedCommits % 50 == 0 && scannedCommits > 0) {
 							console.log(scannedCommits + " commits scanned...");
 						}
 						if(err) {
-							console.log(body);
+							console.error(body);
 							console.error(err);
 							return;
 						}
