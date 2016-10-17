@@ -77,7 +77,6 @@ filename:passwd path:etc
 filename:ssh_config
 filename:.ssh_config
 extension:pkcs12 private
-extension:asc private
 filename:.mysql_history
 filename:.pgpass
 filename:database.yml pass
