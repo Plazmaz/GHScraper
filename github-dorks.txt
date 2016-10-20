@@ -58,7 +58,6 @@ filename:server.cfg rcon password
 JEKYLL_GITHUB_TOKEN
 filename:.bash_history
 filename:.cshrc
-filename:.history
 filename:.sh_history
 filename:sshd_config
 filename:dhcpd.conf
@@ -66,7 +65,7 @@ filename:prod.exs
 filename:prod.secret.exs
 filename:configuration.php JConfig password
 filename:config.php dbpasswd
-filename:config.php pass
+filename:config.php passw
 path:sites databases password
 shodan_api_key extension:py
 shodan_api_key extension:sh
