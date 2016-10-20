@@ -1,3 +1,4 @@
 data*.txt
 node_modules*
 config.json
+collected/*

@@ -167,6 +167,9 @@ function queryTimeline(callback) {
 								if(dorks[j].matches(file)) {
 									console.log(JSON.stringify(dorks[j].queryParts) + ' matched file ' + file.filename + ' with sha ' + file.sha + '!');
 									console.log('Data url: ' + file.raw_url);
+								    var fileStream = fs.createWriteStream("collected/" + file.raw_url.substring('https://github.com'.length).replace(/\//g, "_"));
+								    var r = request(file.raw_url).pipe(fileStream);
+								    r.on("close", fileStream.close);
 									return;
 								}
 							}
